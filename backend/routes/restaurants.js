@@ -3,6 +3,11 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const Restaurant = require('../models/Restaurant');
 
+// Helper to escape special regex characters from user input to prevent ReDoS / syntax errors
+function escapeRegex(text) {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 /**
  * GET /api/restaurants/metadata/options
  * Returns unique cuisine list, country list, awards, and price tiers for filter dropdowns
@@ -42,7 +47,7 @@ router.get('/', async (req, res) => {
         ? cuisine
         : cuisine.split(',').map((c) => c.trim()).filter(Boolean);
       if (cuisineList.length > 0) {
-        query.cuisines = { $in: cuisineList.map((c) => new RegExp(`^${c}$`, 'i')) };
+        query.cuisines = { $in: cuisineList.map((c) => new RegExp(`^${escapeRegex(c)}$`, 'i')) };
       }
     }
 
@@ -68,7 +73,7 @@ router.get('/', async (req, res) => {
 
     // Filter by Country
     if (country && country.trim() !== '') {
-      query.country = new RegExp(`^${country.trim()}$`, 'i');
+      query.country = new RegExp(`^${escapeRegex(country.trim())}$`, 'i');
     }
 
     // Filter by Green Star
@@ -78,7 +83,8 @@ router.get('/', async (req, res) => {
 
     // Text search by name, city, or description
     if (search && search.trim() !== '') {
-      const searchRegex = new RegExp(search.trim(), 'i');
+      const escaped = escapeRegex(search.trim());
+      const searchRegex = new RegExp(escaped, 'i');
       query.$or = [
         { name: searchRegex },
         { city: searchRegex },
