@@ -88,4 +88,4 @@ const restaurantSchema = new mongoose.Schema(
 // Compound text index for fast search queries across name, city, and description
 restaurantSchema.index({ name: 'text', city: 'text', country: 'text', description: 'text' });
 
-module.exports = mongoose.model('Restaurant', restaurantSchema);
+module.exports = mongoose.models.Restaurant || mongoose.model('Restaurant', restaurantSchema);

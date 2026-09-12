@@ -97,6 +97,7 @@ export default function SearchFilterBar({
             Michelin Award
           </label>
           <select
+            aria-label="Michelin Award"
             value={filters.award || ''}
             onChange={(e) => onChange({ ...filters, award: e.target.value, page: 1 })}
             className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/90 border border-slate-700/80 text-slate-100 text-xs focus:outline-none focus:border-amber-500 transition-all cursor-pointer"
