@@ -3,47 +3,120 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-serif: 'Playfair Display', ui-serif, Georgia, serif;
+  }
+
   body {
-    @apply bg-[#0B0F19] text-slate-100 font-sans antialiased;
+    @apply bg-[#0B0F19] text-slate-100 antialiased;
+    font-family: var(--font-sans);
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-serif);
   }
 }
 
-/* Custom scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* ─── Scrollbar ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #0B0F19; }
+::-webkit-scrollbar-thumb { background: #1E2638; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #2D374D; }
+
+/* ─── Keyframes ─────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-::-webkit-scrollbar-track {
-  background: #0B0F19;
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(100%); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
-::-webkit-scrollbar-thumb {
-  background: #1E2638;
-  border-radius: 4px;
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #2D374D;
+@keyframes heartPop {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.4); }
+  70%  { transform: scale(0.88); }
+  100% { transform: scale(1); }
 }
 
-/* Leaflet Map Custom dark theme tweaks */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+/* ─── Animation utilities ───────────────────────────────── */
+.animate-fadeIn    { animation: fadeIn 0.2s ease-out both; }
+.animate-slideInRight { animation: slideInRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) both; }
+.animate-slideInUp { animation: slideInUp 0.35s ease-out both; }
+.animate-heartPop  { animation: heartPop 0.4s ease-out; }
+
+/* Staggered card entrance */
+.card-enter { animation: slideInUp 0.35s ease-out both; }
+.card-enter:nth-child(1)  { animation-delay: 0ms; }
+.card-enter:nth-child(2)  { animation-delay: 40ms; }
+.card-enter:nth-child(3)  { animation-delay: 80ms; }
+.card-enter:nth-child(4)  { animation-delay: 120ms; }
+.card-enter:nth-child(5)  { animation-delay: 160ms; }
+.card-enter:nth-child(6)  { animation-delay: 200ms; }
+.card-enter:nth-child(7)  { animation-delay: 240ms; }
+.card-enter:nth-child(8)  { animation-delay: 280ms; }
+.card-enter:nth-child(n+9){ animation-delay: 320ms; }
+
+/* ─── Gold shimmer border for 3-star cards ──────────────── */
+.tier-3-glow {
+  border-color: transparent !important;
+  background-clip: padding-box;
+  box-shadow:
+    0 0 0 1px rgba(234, 179, 8, 0.45),
+    0 0 18px 0 rgba(234, 179, 8, 0.12),
+    0 4px 24px -4px rgba(0,0,0,0.6);
+}
+.tier-3-glow:hover {
+  box-shadow:
+    0 0 0 1px rgba(234, 179, 8, 0.7),
+    0 0 28px 0 rgba(234, 179, 8, 0.2),
+    0 8px 32px -4px rgba(0,0,0,0.7);
+}
+
+/* Left accent stripe helpers */
+.card-stripe {
+  position: relative;
+  overflow: hidden;
+}
+.card-stripe::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 12px; bottom: 12px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+}
+.card-stripe-gold::before  { background: linear-gradient(180deg, #f59e0b, #d97706); }
+.card-stripe-amber::before { background: linear-gradient(180deg, #f59e0b88, #d9770644); }
+.card-stripe-rose::before  { background: linear-gradient(180deg, #f43f5e88, #e11d4844); }
+.card-stripe-slate::before { background: transparent; }
+
+/* ─── Leaflet dark theme ─────────────────────────────────── */
 .leaflet-container {
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   background-color: #0d131f !important;
-  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-family: var(--font-sans) !important;
   border-radius: 1rem;
 }
 
 .leaflet-popup-content-wrapper {
   background: #161B26 !important;
   color: #F1F5F9 !important;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 0.75rem !important;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5), 0 8px 10px -6px rgba(0,0,0,0.5) !important;
 }
 
-.leaflet-popup-tip {
-  background: #161B26 !important;
-}
+.leaflet-popup-tip { background: #161B26 !important; }
