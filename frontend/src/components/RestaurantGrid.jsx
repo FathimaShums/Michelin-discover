@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import RestaurantCard from './RestaurantCard';
 import LoadingSkeleton from './LoadingSkeleton';
 import EmptyState from './EmptyState';
@@ -37,16 +37,17 @@ export default function RestaurantGrid({
         </span>
       </div>
 
-      {/* Cards Grid */}
+      {/* Cards Grid — staggered entrance animation */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {restaurants.map((restaurant) => (
-          <RestaurantCard
-            key={restaurant.id || restaurant._id}
-            restaurant={restaurant}
-            onClick={onSelectRestaurant}
-            isShortlisted={shortlistIds.includes(restaurant.id)}
-            onToggleShortlist={onToggleShortlist}
-          />
+          <div key={restaurant.id || restaurant._id} className="card-enter">
+            <RestaurantCard
+              restaurant={restaurant}
+              onClick={onSelectRestaurant}
+              isShortlisted={shortlistIds.includes(restaurant.id)}
+              onToggleShortlist={onToggleShortlist}
+            />
+          </div>
         ))}
       </div>
 
